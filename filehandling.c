@@ -4,13 +4,13 @@ ssize_t read_until(int fd, char buf[], size_t n, char *str) {
   ssize_t totalread = 0;
   ssize_t bytesread;
 
-  while (totalread < n) {
+  while (totalread < (ssize_t)n) {
     bytesread = read(fd, buf + totalread, n - totalread);
 
     if (bytesread > 0) {
       totalread += bytesread;
 
-      //temporarily set null terminator to check segment as a string
+      // temporarily set null terminator to check segment as a string
       buf[totalread] = '\0';
 
       if (str != NULL) {
@@ -38,7 +38,7 @@ ssize_t nread(int fd, char buf[], size_t n) {
   ssize_t totalread = 0;
   ssize_t bytesread;
 
-  while (totalread < n) {
+  while (totalread < (ssize_t)n) {
     bytesread = read(fd, buf + totalread, n - totalread);
 
     if (bytesread > 0) {
@@ -60,7 +60,7 @@ ssize_t nwrite(int fd, char buf[], size_t n) {
   ssize_t totalwritten = 0;
   ssize_t byteswritten;
 
-  while (totalwritten < n) {
+  while (totalwritten < (ssize_t)n) {
     byteswritten = write(fd, buf + totalwritten, n - totalwritten);
     if (byteswritten > 0) {
       totalwritten += byteswritten;
@@ -83,8 +83,9 @@ ssize_t filepass(int src, int dst, size_t n) {
   ssize_t byteswritten;
   char buf[1024];
 
-  while (totalwritten < n) {
-    //set bytes to read either to buf size or whatevers left of the fd is smaller than buf
+  while (totalwritten < (ssize_t)n) {
+    // set bytes to read either to buf size or whatevers left of the fd is
+    // smaller than buf
     size_t bytes_to_read =
         (n - totalwritten < sizeof(buf)) ? (n - totalwritten) : sizeof(buf);
     bytesread = read(src, buf, bytes_to_read);
@@ -92,7 +93,7 @@ ssize_t filepass(int src, int dst, size_t n) {
     if (bytesread > 0) {
       ssize_t written = 0;
 
-      while (written < (size_t)bytesread) {
+      while (written < bytesread) {
         byteswritten = write(dst, buf + written, bytesread - written);
 
         if (byteswritten > 0) {

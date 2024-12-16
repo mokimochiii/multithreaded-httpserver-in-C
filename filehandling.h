@@ -8,15 +8,15 @@
 
 #pragma once
 #include <errno.h>
+#include <fcntl.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <fcntl.h>
 
 /** @brief Reads bytes from fd into buf until either
  *  1. It has read n bytes
