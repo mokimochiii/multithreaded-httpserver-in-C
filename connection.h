@@ -14,7 +14,7 @@
  * @brief Represents a socket listening for connections
  */
 typedef struct {
-	int fd;
+  int fd;
 } ConnectionListener;
 
 /** @brief Initializes a ConnectionListener that listens on the provided port
