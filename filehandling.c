@@ -10,6 +10,7 @@ ssize_t read_until(int fd, char buf[], size_t n, char *str) {
     if (bytesread > 0) {
       totalread += bytesread;
 
+      //temporarily set null terminator to check segment as a string
       buf[totalread] = '\0';
 
       if (str != NULL) {
@@ -83,6 +84,7 @@ ssize_t filepass(int src, int dst, size_t n) {
   char buf[1024];
 
   while (totalwritten < n) {
+    //set bytes to read either to buf size or whatevers left of the fd is smaller than buf
     size_t bytes_to_read =
         (n - totalwritten < sizeof(buf)) ? (n - totalwritten) : sizeof(buf);
     bytesread = read(src, buf, bytes_to_read);
