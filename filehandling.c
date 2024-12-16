@@ -13,11 +13,11 @@ ssize_t read_until(int fd, char buf[], size_t n, char *str) {
       buf[totalread] = '\0';
 
       if (str != NULL) {
-        char *found = strstr(buf,str);
-	if (found != NULL) {
-		totalread = found - buf + strlen(str);
-		break;
-	}
+        char *found = strstr(buf, str);
+        if (found != NULL) {
+          totalread = found - buf + strlen(str);
+          break;
+        }
       }
     } else if (bytesread == 0) {
       break;
