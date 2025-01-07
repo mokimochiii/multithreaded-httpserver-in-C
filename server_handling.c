@@ -124,7 +124,7 @@ void handle_put(Connection *conn, Hashmap *map) {
     }
     isCreated = true;
   }
-  
+
   // Open the file.
   int fd = open(uri, O_WRONLY | O_CREAT | O_TRUNC, 0666);
   if (fd < 0) {

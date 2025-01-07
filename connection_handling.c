@@ -159,13 +159,13 @@ const Response_t *connection_write_to_file(Connection *conn, int fd) {
 
   char *content_length_str = connection_get_header(conn, "Content-Length");
   if (!content_length_str)
-	  return &RESPONSE_BAD_REQUEST;
+    return &RESPONSE_BAD_REQUEST;
 
   size_t content_length = atoi(content_length_str);
   free(content_length_str);
 
   if (write(fd, conn->body_start, content_length) != (ssize_t)content_length)
-	  return &RESPONSE_INTERNAL_SERVER_ERROR;
+    return &RESPONSE_INTERNAL_SERVER_ERROR;
 
   return NULL;
 }

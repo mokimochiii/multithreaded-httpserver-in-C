@@ -13,7 +13,7 @@ typedef struct Connection {
   char *uri;
   const Request_t *request;
   char headers[1024];
-  char *body_start;     
+  char *body_start;
 } Connection;
 
 Connection *connection_new(int connfd);
