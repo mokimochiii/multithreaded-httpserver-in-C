@@ -7,14 +7,6 @@
 #include <string.h>
 #include <unistd.h>
 
-struct Connection {
-  int connfd;
-  char *uri;
-  const Request_t *request;
-  char headers[1024];
-  char *body_start;
-};
-
 Connection *connection_new(int connfd) {
   Connection *conn = (Connection *)malloc(sizeof(Connection));
   if (conn == NULL) {
@@ -80,7 +72,7 @@ const Response_t *connection_parse(Connection *conn) {
     size_t uri_len = matches[2].rm_eo - matches[2].rm_so;
     conn->uri = (char *)malloc(uri_len + 1);
     if (conn->uri) {
-      strncpy(conn->uri, buffer + matches[2].rm_so, uri_len);
+      strncpy(conn->uri, buffer + matches[2].rm_so + 1, uri_len - 1);
       conn->uri[uri_len] = '\0';
     }
 
@@ -165,11 +157,15 @@ const Response_t *connection_write_to_file(Connection *conn, int fd) {
   if (!conn || fd < 0)
     return &RESPONSE_BAD_REQUEST;
 
-  size_t len = (size_t)atoi(connection_get_header(conn, "Content-Length"));
-  ssize_t byteswritten = filepass(conn->connfd, fd, len);
+  char *content_length_str = connection_get_header(conn, "Content-Length");
+  if (!content_length_str)
+	  return &RESPONSE_BAD_REQUEST;
 
-  if (byteswritten < 0 || (size_t)byteswritten != len)
-    return &RESPONSE_INTERNAL_SERVER_ERROR;
+  size_t content_length = atoi(content_length_str);
+  free(content_length_str);
+
+  if (write(fd, conn->body_start, content_length) != (ssize_t)content_length)
+	  return &RESPONSE_INTERNAL_SERVER_ERROR;
 
   return NULL;
 }

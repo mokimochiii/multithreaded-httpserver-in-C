@@ -8,7 +8,13 @@
 #include <stdint.h>
 #include <sys/types.h>
 
-typedef struct Connection Connection;
+typedef struct Connection {
+  int connfd;
+  char *uri;
+  const Request_t *request;
+  char headers[1024];
+  char *body_start;     
+} Connection;
 
 Connection *connection_new(int connfd);
 
